@@ -1,0 +1,86 @@
+﻿(venv) [py@localhost NewsPaper]$ python3 manage.py shell
+Python 3.9.6 (default, Jun 29 2021, 10:42:27) 
+[GCC 10.2.1 20210313 (ALT Sisyphus 10.2.1-alt3)] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+(InteractiveConsole)
+>>> from news.models import *
+>>> User.objects.create_user(username='Simona')
+<User: Simona>
+>>> User.objects.create_user(username='Jax')
+<User: Jax>
+>>> User.objects.create_user(username='Den')
+<User: Den>
+>>> User.objects.create_user(username='Gena')
+<User: Gena>
+>>> Author.objects.create(authorUser=User.objects.get(id=1))
+<Author: Author object (1)>
+>>> Author.objects.create(authorUser=User.objects.get(id=2))
+<Author: Author object (2)>
+>>> Category.objects.create(name='Sport')
+<Category: Category object (1)>
+>>> Category.objects.create(name='Auto')
+<Category: Category object (2)>
+>>> Category.objects.create(name='Moto')
+<Category: Category object (3)>
+>>> Category.objects.create(name='Ship')
+<Category: Category object (4)>
+>>> Post.objects.create(author=Author.objects.get(id=1), categoryType='nw', title='New...', text='somemidtext')
+<Post: Post object (1)>
+>>> Post.objects.create(author=Author.objects.get(id=2), categoryType='nw', title='Start...', text='somemidtext')
+<Post: Post object (2)>
+>>> Post.objects.create(author=Author.objects.get(id=1), categoryType='ar', title='Season...', text='somemidtext')
+<Post: Post object (3)>
+>>> Post.objects.create(author=Author.objects.get(id=2), categoryType='ar', title='After...', text='somemidtext')
+<Post: Post object (4)>
+>>> Post.objects.get(id=1).postCategory.add(Category.objects.get(id=2))
+>>> Post.objects.get(id=2).postCategory.add(Category.objects.get(id=1))
+>>> Post.objects.get(id=3).postCategory.add(Category.objects.get(id=1))
+>>> Post.objects.get(id=3).postCategory.add(Category.objects.get(id=3))
+>>> Post.objects.get(id=4).postCategory.add(Category.objects.get(id=4))
+>>> Comment.objects.create(commentPost=Post.objects.get(id=1), commentUser=User.objects.get(id=4), text='anytextbyauthor')
+<Comment: Comment object (1)>
+>>> Comment.objects.create(commentPost=Post.objects.get(id=2), commentUser=User.objects.get(id=4), text='anytextbyauthor')
+<Comment: Comment object (2)>
+>>> Comment.objects.create(commentPost=Post.objects.get(id=3), commentUser=User.objects.get(id=3), text='anytextbyauthor')
+<Comment: Comment object (3)>
+>>> Comment.objects.create(commentPost=Post.objects.get(id=3), commentUser=User.objects.get(id=1), text='anytextbyauthor')
+<Comment: Comment object (4)>
+>>> Comment.objects.create(commentPost=Post.objects.get(id=3), commentUser=User.objects.get(id=2), text='anytextbyauthor')
+<Comment: Comment object (5)>
+>>> Comment.objects.create(commentPost=Post.objects.get(id=3), commentUser=User.objects.get(id=4), text='anytextbyauthor')
+<Comment: Comment object (6)>
+>>> Comment.objects.create(commentPost=Post.objects.get(id=4), commentUser=User.objects.get(id=3), text='anytextbyauthor')
+<Comment: Comment object (7)>
+>>> Comment.objects.create(commentPost=Post.objects.get(id=4), commentUser=User.objects.get(id=2), text='anytextbyauthor')
+<Comment: Comment object (8)>
+>>> Comment.objects.create(commentPost=Post.objects.get(id=4), commentUser=User.objects.get(id=1), text='anytextbyauthor')
+<Comment: Comment object (9)>
+>>> Comment.objects.create(commentPost=Post.objects.get(id=4), commentUser=User.objects.get(id=4), text='anytextbyauthor')
+<Comment: Comment object (10)>
+>>> Post.objects.get(id=3).like()
+>>> Post.objects.get(id=4).dislike()
+>>> Comment.objects.get(id=3).like()
+>>> Comment.objects.get(id=3).like()
+>>> Comment.objects.get(id=4).like()
+>>> Comment.objects.get(id=5).like()
+>>> Comment.objects.get(id=6).like()
+>>> Comment.objects.get(id=8).like()
+>>> Comment.objects.get(id=8).like()
+>>> Comment.objects.get(id=10).like()
+>>> Comment.objects.get(id=5).dislike()
+>>> Author.objects.get(id=1).update_rating()
+>>> Author.objects.get(id=2).update_rating()
+>>> Author.objects.get(id=1).ratingAuthor
+8
+>>> Author.objects.get(id=2).ratingAuthor
+2
+>>> Author.objects.order_by('-ratingAuthor').values('ratingAuthor', 'authorUser__username')[0]
+{'ratingAuthor': 8, 'authorUser__username': 'Simona'}
+>>> Post.objects.order_by('-rating').values('dateCreation','author__authorUser__username', 'rating', 'title')[0]
+{'dateCreation': datetime.datetime(2023, 1, 12, 13, 28, 21, 615502, tzinfo=datetime.timezone.utc), 'author__authorUser__username': 'Simona', 'rating': 1, 'title': 'Season...'}
+>>> Post.objects.order_by('-rating')[0].preview()
+'somemidtext...'
+>>> Post.objects.order_by('-rating')[0].comment_set.all().values('dateCreation', 'commentUser', 'rating', 'text')
+<QuerySet [{'dateCreation': datetime.datetime(2023, 1, 12, 13, 32, 11, 107981, tzinfo=datetime.timezone.utc), 'commentUser': 3, 'rating': 2, 'text': 'anytextbyauthor'}, {'dateCreation': datetime.datetime(2023, 1, 12, 13, 33, 2, 514844, tzinfo=datetime.timezone.utc), 'commentUser': 1, 'rating': 1, 'text': 'anytextbyauthor'}, {'dateCreation': datetime.datetime(2023, 1, 12, 13, 33, 30, 330202, tzinfo=datetime.timezone.utc), 'commentUser': 2, 'rating': 0, 'text': 'anytextbyauthor'}, {'dateCreation': datetime.datetime(2023, 1, 12, 13, 34, 8, 705991, tzinfo=datetime.timezone.utc), 'commentUser': 4, 'rating': 1, 'text': 'anytextbyauthor'}]>
+>>> exit()
+
