@@ -1,0 +1,21 @@
+{% extends 'flatpages/default.html' %}
+
+{% block title %}
+News
+{% endblock title %}
+
+{% block content %}
+<h3><strong>НОВОСТИ {{News|length}}</strong></h3>
+<hr>
+{% for post in News %}
+<table>
+     <tr>
+     <td width="300"  align="left" style="font-size:18px"><strong>{{ post.title }}</strong></td>
+     <td style="font-size:11px">({{ post.dateCreation|date:'d M Y' }}):</td>
+     <td><a href="{{ post.pk }}">{{ post.preview }}</a></td>
+     </tr>
+</table>
+<hr>
+{% endfor %}
+
+{% endblock content %}

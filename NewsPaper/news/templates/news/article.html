@@ -1,0 +1,23 @@
+{% extends 'flatpages/default.html' %}
+
+{% block title %}
+Article
+{% endblock title %}
+
+{% block content %}
+<h3><strong>СТАТЬИ</strong></h3>
+<hr>
+{% for art in Article %}
+<table border="0">
+     <tr>
+     <td width="200"  align="left" style="font-size:18px"><strong>{{ art.title }}</strong></td>
+     <td style="font-size:11px">({{ art.dateCreation|date:'d M Y' }}):</td>
+     <td><a href="{{ art.pk }}">{{ art.preview }}</a></td>
+     </tr>
+</table>
+<hr>
+{% endfor %}
+
+{% endblock content %}
+
+

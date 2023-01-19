@@ -1,0 +1,16 @@
+{% extends 'flatpages/default.html' %}
+
+{% load custom_filters %}
+
+{% block title %}
+News
+{% endblock title %}
+
+{% block content %}
+
+<h3><strong>{{ Detail.title }}</strong></h3>
+{{ Detail.dateCreation|date:'d M Y' }}<br>
+<hr>
+{{ Detail.text|censor }}<br><br>
+<p align="left">Автор : {{ Detail.author }}</p>
+{% endblock content %}
