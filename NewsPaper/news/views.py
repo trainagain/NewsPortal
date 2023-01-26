@@ -1,14 +1,27 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.core.paginator import Paginator
+from django.urls import reverse_lazy
 from .models import *
+from .filters import *
+from .forms import *
 
 
-class NewsList(ListView):
-    queryset = Post.objects.filter(categoryType='nw')
-    ordering = '-dateCreation'
-    context_object_name = 'News'
-    template_name = 'news/news.html'
+def NewsList(request):
+    posts = Post.objects.filter(categoryType='nw').order_by('-dateCreation')
+    paginatorn = Paginator(posts, 5)
+    page_numbern = request.GET.get('pagen')
+    pagen_obj = paginatorn.get_page(page_numbern)
+
+    articles = Post.objects.filter(categoryType='ar').order_by('-dateCreation')
+    paginatora = Paginator(articles, 5)
+    page_numbera = request.GET.get('pagea')
+    pagea_obj = paginatora.get_page(page_numbera)
+
+    response_data = {'articles': articles, 'posts': posts, 'pagen_obj': pagen_obj, 'pagea_obj': pagea_obj}
+
+    return render(request, 'news/news.html', response_data)
 
 
 class Article(ListView):
@@ -25,12 +38,64 @@ class Authorlist(ListView):
 
 
 class Posts(ListView):
-    model = Post
-    context_object_name = 'Post'
+    queryset = Post.objects.filter(categoryType='nw')
+    ordering = '-dateCreation'
+    context_object_name = 'Posts'
     template_name = 'news/post.html'
 
 
-class Post(DetailView):
+class PostDitail(DetailView):
     model = Post
     context_object_name = 'Detail'
     template_name = 'news/post_detail.html'
+
+
+class SeeArhive(ListView):
+    model = Post
+    context_object_name = 'SeeArhive'
+    template_name = 'news/search.html'
+    paginate_by = 4
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        self.filterset = SeArch(self.request.GET, queryset)
+        return self.filterset.qs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['filterset'] = self.filterset
+        return context
+
+
+class PostCreate(CreateView):
+    form_class = PostForm
+    model = Post
+    template_name = 'news/post_create.html'
+
+    def form_valid(self, form):
+        post = form.save(commit=False)
+        post.categoryType = 'nw'
+        return super().form_valid(form)
+
+
+class PostArCreate(CreateView):
+    form_class = PostArForm
+    model = Post
+    template_name = 'news/article_create.html'
+
+    def form_valid(self, form):
+        post = form.save(commit=False)
+        post.categoryType = 'ar'
+        return super().form_valid(form)
+
+
+class PostUpdate(UpdateView):
+    form_class = PostForm
+    model = Post
+    template_name = 'news/post_edit.html'
+
+
+class PostDelete(DeleteView):
+    model = Post
+    template_name = 'news/post_delete.html'
+    success_url = reverse_lazy('NewList')

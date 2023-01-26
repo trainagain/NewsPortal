@@ -5,17 +5,71 @@ News
 {% endblock title %}
 
 {% block content %}
-<h3><strong>НОВОСТИ {{News|length}}</strong></h3>
+<h3><strong>НОВОСТИ {{posts|length}}</strong></h3>
 <hr>
-{% for post in News %}
+{% for post in pagen_obj %}
 <table>
      <tr>
-     <td width="300"  align="left" style="font-size:18px"><strong>{{ post.title }}</strong></td>
-     <td style="font-size:11px">({{ post.dateCreation|date:'d M Y' }}):</td>
-     <td><a href="{{ post.pk }}">{{ post.preview }}</a></td>
+     <td width="800"  align="left" style="font-size:16px"><strong>{{ post.title }}</strong></td>
+     <td style="font-size:10px">({{ post.dateCreation|date:'d M Y' }}):</td>
+     <td><a href="/news/{{ post.pk }}">{{ post.preview }}</a></td>
      </tr>
 </table>
 <hr>
 {% endfor %}
+   {# Добавляем пагинацию на страницу #}
 
+
+   {# Информация о предыдущих страницах #}
+   {% if pagen_obj.has_previous %}
+       <a href="?pagen=1">1</a>
+       {% if pagen_obj.previous_page_number != 1 %}
+           ...
+           <a href="?pagen={{ pagen_obj.previous_page_number }}">{{ pagen_obj.previous_page_number }}</a>
+       {% endif %}
+   {% endif %}
+
+   {# Информация о текущей странице #}
+   {{ pagen_obj.number }}
+
+   {# Информация о следующих страницах #}
+   {% if pagen_obj.has_next %}
+       <a href="?pagen={{ pagen_obj.next_page_number }}">{{ pagen_obj.next_page_number }}</a>
+       {% if paginator.num_pages != pagen_obj.next_page_number %}
+           ...
+           <a href="?pagen={{ pagen_obj.paginator.num_pages }}">{{ pagen_obj.paginator.num_pages }}</a>
+       {% endif %}
+   {% endif %}
+
+<br><br><br>
+
+<h3><strong>СТАТЬИ {{articles|length}}</strong></h3>
+<hr>
+{% for articles in pagea_obj %}
+<table>
+     <tr>
+     <td width="800"  align="left" style="font-size:16px"><strong>{{ articles.title }}</strong></td>
+     <td style="font-size:10px">({{ articles.dateCreation|date:'d M Y' }}):</td>
+     <td><a href="/article/{{articles.pk }}">{{ articles.preview }}</a></td>
+     </tr>
+</table>
+<hr>
+{% endfor %}
+   {% if pagea_obj.has_previous %}
+       <a href="?pagea=1">1</a>
+       {% if pagea_obj.previous_page_number != 1 %}
+           ...
+           <a href="?pagea={{ pagea_obj.previous_page_number }}">{{ pagea_obj.previous_page_number }}</a>
+       {% endif %}
+   {% endif %}
+
+   {{ pagea_obj.number }}
+
+   {% if pagea_obj.has_next %}
+       <a href="?pagea={{ pagea_obj.next_page_number }}">{{ pagea_obj.next_page_number }}</a>
+       {% if paginator.num_pages != pagea_obj.next_page_number %}
+           ...
+           <a href="?pagea={{ pagea_obj.paginator.num_pages }}">{{ pagea_obj.paginator.num_pages }}</a>
+       {% endif %}
+   {% endif %}
 {% endblock content %}

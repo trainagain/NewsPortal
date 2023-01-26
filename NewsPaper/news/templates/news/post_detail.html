@@ -3,13 +3,16 @@
 {% load custom_filters %}
 
 {% block title %}
-News
+Ditail
 {% endblock title %}
 
 {% block content %}
 
 <h3><strong>{{ Detail.title }}</strong></h3>
 {{ Detail.dateCreation|date:'d M Y' }}<br>
+<hr>
+<a href="edit/"><input type="submit" value="редактировать" /></a>
+         <a href="delete/"><input type="submit" value="удалить" /></a>
 <hr>
 {{ Detail.text|censor }}<br><br>
 <p align="left">Автор : {{ Detail.author }}</p>
