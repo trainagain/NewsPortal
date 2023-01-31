@@ -11,9 +11,13 @@ Ditail
 <h3><strong>{{ Detail.title }}</strong></h3>
 {{ Detail.dateCreation|date:'d M Y' }}<br>
 <hr>
+{% if perms.news.change_post %}
 <a href="edit/"><input type="submit" value="редактировать" /></a>
-         <a href="delete/"><input type="submit" value="удалить" /></a>
+{% endif %}
+{% if perms.news.delete_post %}
+<a href="delete/"><input type="submit" value="удалить" /></a>
 <hr>
+{% endif %}
 {{ Detail.text|censor }}<br><br>
 <p align="left">Автор : {{ Detail.author }}</p>
 {% endblock content %}

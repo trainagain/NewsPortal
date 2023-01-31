@@ -1,7 +1,10 @@
 from django import forms
 from django.core.exceptions import ValidationError
+from allauth.account.forms import SignupForm
+from django.contrib.auth.models import Group
 
 from .models import Post
+
 
 
 class PostForm(forms.ModelForm):
@@ -40,3 +43,11 @@ class PostArForm(forms.ModelForm):
             )
 
         return cleaned_data
+
+
+class CustomSignupForm(SignupForm):
+    def save(self, request):
+        user = super().save(request)
+        common_users = Group.objects.get(name="common users")
+        user.groups.add(common_users)
+        return user

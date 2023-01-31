@@ -6,9 +6,12 @@ Posts
 
 {% block content %}
 <h3><strong>НОВОСТИ</strong> </h3>
-<br><h5><strong>
+<br>
+{% if perms.news.add_post %}
+<h5><strong>
             <a href="create/"> <input type="submit" value="Написать новость" /></a>
         </strong></h5>
+{% endif %}
 <hr>
 {% for post in Posts %}
 <table>
@@ -16,8 +19,13 @@ Posts
      <td width="800"  align="left" style="font-size:16px"><strong><a href="/news/{{ post.pk }}">{{ post.title }}</a></strong></td>
      <td style="font-size:10px">({{ post.dateCreation|date:'d M Y' }}):<br>
      рейтинг : {% if post.rating != 0 %}{{ post.rating }}{% else %}0{% endif %} </td>
-     <td align="center"><a href="{{ post.pk }}/edit/"><input type="submit" value="редактировать" /></a>
-         <a href="{{ post.pk }}/delete/"><input type="submit" value="удалить" /></a></td>
+     <td>
+         {% if perms.news.change_post %}
+         <a href="{{ art.pk }}/edit/"><input type="submit" value="редактировать" /></a>
+         {% endif %}
+         {% if perms.news.delete_post %}
+         <a href="{{ art.pk }}/delete/"><input type="submit" value="удалить" /></a></td>
+         {% endif %}
      </tr>
 </table>
 <hr>

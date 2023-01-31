@@ -6,9 +6,12 @@ Article
 
 {% block content %}
 <h3><strong>СТАТЬИ</strong></h3>
-<br><h5><strong>
+<br>
+{% if perms.news.add_post %}
+<h5><strong>
             <a href="create/"> <input type="submit" value="Написать статью" /></a>
         </strong></h5>
+{% endif %}
 <hr>
 {% for art in Article %}
 <table>
@@ -16,8 +19,13 @@ Article
      <td width="800"  align="left" style="font-size:16px"><strong><a href="/news/{{ art.pk }}">{{ art.title }}</a></strong></td>
      <td style="font-size:10px">({{ art.dateCreation|date:'d M Y' }}):<br>
      рейтинг : {% if art.rating != 0 %}{{ art.rating }}{% else %}0{% endif %}</td>
-     <td><a href="{{ art.pk }}/edit/"><input type="submit" value="редактировать" /></a>
+     <td>
+         {% if perms.news.change_post %}
+         <a href="{{ art.pk }}/edit/"><input type="submit" value="редактировать" /></a>
+         {% endif %}
+         {% if perms.news.delete_post %}
          <a href="{{ art.pk }}/delete/"><input type="submit" value="удалить" /></a></td>
+         {% endif %}
      </tr>
 </table>
 <hr>

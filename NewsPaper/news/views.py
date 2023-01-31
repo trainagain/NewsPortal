@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.core.paginator import Paginator
 from django.urls import reverse_lazy
@@ -67,7 +68,9 @@ class SeeArhive(ListView):
         return context
 
 
-class PostCreate(CreateView):
+class PostCreate(LoginRequiredMixin, CreateView):
+    permission_required = ('simpleapp.add_post',)
+    raise_exception = True
     form_class = PostForm
     model = Post
     template_name = 'news/post_create.html'
@@ -78,7 +81,9 @@ class PostCreate(CreateView):
         return super().form_valid(form)
 
 
-class PostArCreate(CreateView):
+class PostArCreate(LoginRequiredMixin, CreateView):
+    permission_required = ('simpleapp.add_post',)
+    raise_exception = False
     form_class = PostArForm
     model = Post
     template_name = 'news/article_create.html'
@@ -89,13 +94,17 @@ class PostArCreate(CreateView):
         return super().form_valid(form)
 
 
-class PostUpdate(UpdateView):
+class PostUpdate(LoginRequiredMixin, UpdateView):
+    permission_required = ('simpleapp.change_post',)
+    raise_exception = True
     form_class = PostForm
     model = Post
     template_name = 'news/post_edit.html'
 
 
-class PostDelete(DeleteView):
+class PostDelete(LoginRequiredMixin, DeleteView):
+    permission_required = ('simpleapp.delete_post',)
+    raise_exception = True
     model = Post
     template_name = 'news/post_delete.html'
     success_url = reverse_lazy('NewList')
