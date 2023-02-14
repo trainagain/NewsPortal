@@ -21,10 +21,10 @@ Posts
      рейтинг : {% if post.rating != 0 %}{{ post.rating }}{% else %}0{% endif %} </td>
      <td>
          {% if perms.news.change_post %}
-         <a href="{{ art.pk }}/edit/"><input type="submit" value="редактировать" /></a>
+         <a href="{{ post.pk }}/edit/"><input type="submit" value="редактировать" /></a>
          {% endif %}
          {% if perms.news.delete_post %}
-         <a href="{{ art.pk }}/delete/"><input type="submit" value="удалить" /></a></td>
+         <a href="{{ post.pk }}/delete/"><input type="submit" value="удалить" /></a></td>
          {% endif %}
      </tr>
 </table>

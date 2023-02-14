@@ -23,8 +23,14 @@
                         <li class="nav-item"><a class="nav-link active" aria-current="page" href="/news/">Новости</a></li>
                         <li class="nav-item"><a class="nav-link active" aria-current="page" href="/article/">Статьи</a></li>
                         <li class="nav-item"><a class="nav-link active" aria-current="page" href="/search/">Поиск</a></li>
-                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="/accounts/login/">ВХОД</a></li>
+
+                        {% if user.is_authenticated %}
+                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="/subscriptions/">Подписка</a></li>
                         <li class="nav-item"><a class="nav-link active" aria-current="page" href="/accounts/logout/">ВЫХОД</a></li>
+                        {% endif %}
+                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="/accounts/login/">
+                           {% if user.is_authenticated %}Вы вошли как: {{ user }}{% else %}ВХОД{% endif %}
+                        </a></li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Dropdown</a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">

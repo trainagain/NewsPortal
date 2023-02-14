@@ -4,6 +4,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.core.paginator import Paginator
 from django.urls import reverse_lazy
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_protect
+from django.db.models import Exists, OuterRef
 from .models import *
 from .filters import *
 from .forms import *
@@ -69,7 +72,7 @@ class SeeArhive(ListView):
 
 
 class PostCreate(LoginRequiredMixin, CreateView):
-    permission_required = ('simpleapp.add_post',)
+    permission_required = ('news.add_post',)
     raise_exception = True
     form_class = PostForm
     model = Post
@@ -82,7 +85,7 @@ class PostCreate(LoginRequiredMixin, CreateView):
 
 
 class PostArCreate(LoginRequiredMixin, CreateView):
-    permission_required = ('simpleapp.add_post',)
+    permission_required = ('news.add_post',)
     raise_exception = False
     form_class = PostArForm
     model = Post
@@ -95,7 +98,7 @@ class PostArCreate(LoginRequiredMixin, CreateView):
 
 
 class PostUpdate(LoginRequiredMixin, UpdateView):
-    permission_required = ('simpleapp.change_post',)
+    permission_required = ('news.change_post',)
     raise_exception = True
     form_class = PostForm
     model = Post
@@ -103,8 +106,39 @@ class PostUpdate(LoginRequiredMixin, UpdateView):
 
 
 class PostDelete(LoginRequiredMixin, DeleteView):
-    permission_required = ('simpleapp.delete_post',)
+    permission_required = ('news.delete_post',)
     raise_exception = True
     model = Post
     template_name = 'news/post_delete.html'
     success_url = reverse_lazy('NewList')
+
+
+@login_required
+@csrf_protect
+def subscriptions(request):
+    if request.method == 'POST':
+        category_id = request.POST.get('category_id')
+        category = Category.objects.get(id=category_id)
+        action = request.POST.get('action')
+
+        if action == 'subscribe':
+            Subscriber.objects.create(user=request.user, category=category)
+        elif action == 'unsubscribe':
+            Subscriber.objects.filter(
+                user=request.user,
+                category=category,
+            ).delete()
+
+    categories_with_subscriptions = Category.objects.annotate(
+        user_subscribed=Exists(
+            Subscriber.objects.filter(
+                user=request.user,
+                category=OuterRef('pk'),
+            )
+        )
+    ).order_by('name')
+    return render(
+        request,
+        'news/subscriptions.html',
+        {'categories': categories_with_subscriptions},
+    )

@@ -61,7 +61,7 @@ class Post(models.Model):
         return '{}...'.format(self.text[0:19])
 
     def __str__(self):
-       return '{}'.format(self.title)
+        return '{}'.format(self.title)
 
     def get_absolute_url(self):
         return reverse('post_detail', kwargs={'pk': self.pk})
@@ -72,7 +72,8 @@ class PostCategory(models.Model):
     categoryThrough = models.ForeignKey(Category, on_delete=models.CASCADE)
 
     def __str__(self):
-       return '{}'.format(self.postThrough)
+        return '{}'.format(self.postThrough)
+
 
 class Comment(models.Model):
     commentPost = models.ForeignKey(Post, on_delete=models.CASCADE)
@@ -91,3 +92,11 @@ class Comment(models.Model):
 
     def __str__(self):
         return '{}'.format(self.commentPost)
+
+
+class Subscriber(models.Model):
+    user = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name='subscriptions', )
+    category = models.ForeignKey(to='Category', on_delete=models.CASCADE, related_name='subscriptions', )
+
+    def __str__(self):
+        return '{}'.format(self.id)
