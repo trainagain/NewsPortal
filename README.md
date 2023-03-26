@@ -1,5 +1,5 @@
 # NewsPortal
-## Hi there, I'm [Ilya]() 
+## Hi there, I'm Ilya. This is my first education project. 
 ### Student SkillFactory, from Russia
 #
 [![Typing SVG](https://readme-typing-svg.herokuapp.com?color=%2336BCF7&lines=Full-stack+development+on+Python)](https://git.io/typing-svg)
