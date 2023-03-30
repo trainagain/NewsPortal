@@ -6,4 +6,4 @@
 
 [![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=trainagain&layout=compact)](https://github.com/trainagain/NewsPortal)
 #
-# **For launch project it should be installed PostgreSQL, Redis and Celery.**
+# **For launch project it should be installed Redis and Celery.**
