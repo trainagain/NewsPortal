@@ -9,20 +9,20 @@ class Author(models.Model):
     ratingAuthor = models.SmallIntegerField(default=0)
 
     def update_rating(self):
-        postRat = self.post_set.aggregate(postRating=Sum('rating'))
-        pRat = 0
-        pRat += postRat.get('postRating') if postRat.get('postRating') else 0
+        post_rat = self.post_set.aggregate(postRating=Sum('rating'))
+        p_rat = 0
+        p_rat += post_rat.get('postRating') if post_rat.get('postRating') else 0
 
-        commentRat = self.authorUser.comment_set.aggregate(commentRating=Sum('rating'))
-        cRat = 0
-        cRat += commentRat.get('commentRating') if commentRat.get('commentRating')else 0
+        comment_rat = self.authorUser.comment_set.aggregate(commentRating=Sum('rating'))
+        c_rat = 0
+        c_rat += comment_rat.get('commentRating') if comment_rat.get('commentRating')else 0
 
         for post in self.post_set.all():
-            comPosRat = post.comment_set.aggregate(CommentPostRating=Sum('rating'))
-        cpRat = 0
-        cpRat += comPosRat.get('CommentPostRating') if comPosRat.get('CommentPostRating') else 0
+            com_pos_rat = post.comment_set.aggregate(CommentPostRating=Sum('rating'))
+        cp_rat = 0
+        cp_rat += com_pos_rat.get('CommentPostRating') if com_pos_rat.get('CommentPostRating') else 0
 
-        self.ratingAuthor = pRat * 3 + cRat + cpRat
+        self.ratingAuthor = p_rat * 3 + c_rat + cp_rat
         self.save()
 
     def __str__(self):
@@ -96,7 +96,7 @@ class Comment(models.Model):
 
 class Subscriber(models.Model):
     user = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name='subscriptions', )
-    category = models.ForeignKey(to='Category', on_delete=models.CASCADE, related_name='subscriptions', )
+    p_rat = models.ForeignKey(to='Category', on_delete=models.CASCADE, related_name='subscriptions', )
 
     def __str__(self):
         return '{}'.format(self.id)

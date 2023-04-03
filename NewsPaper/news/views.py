@@ -10,6 +10,9 @@ from django.db.models import Exists, OuterRef
 from .models import *
 from .filters import *
 from .forms import *
+# import logging
+#
+# logger = logging.getLogger(__name__)
 
 
 def NewsList(request):
@@ -124,21 +127,14 @@ def subscriptions(request):
         if action == 'subscribe':
             Subscriber.objects.create(user=request.user, category=category)
         elif action == 'unsubscribe':
-            Subscriber.objects.filter(
-                user=request.user,
-                category=category,
-            ).delete()
+            Subscriber.objects.filter(user=request.user, category=category,).delete()
 
     categories_with_subscriptions = Category.objects.annotate(
-        user_subscribed=Exists(
-            Subscriber.objects.filter(
-                user=request.user,
-                category=OuterRef('pk'),
-            )
-        )
-    ).order_by('name')
-    return render(
-        request,
-        'news/subscriptions.html',
-        {'categories': categories_with_subscriptions},
-    )
+                                                              user_subscribed=Exists(
+                                                                                     Subscriber.objects.filter
+                                                                                     (user=request.user,
+                                                                                      category=OuterRef('pk'),)
+                                                                                     )
+                                                              ).order_by('name')
+
+    return render(request, 'news/subscriptions.html', {'categories': categories_with_subscriptions},)

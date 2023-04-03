@@ -6,7 +6,6 @@ from django.contrib.auth.models import Group
 from .models import Post
 
 
-
 class PostForm(forms.ModelForm):
     title = forms.CharField(min_length=15)
 

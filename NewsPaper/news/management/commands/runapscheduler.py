@@ -18,29 +18,29 @@ logger = logging.getLogger(__name__)
 
 def my_job():
     pass
-    # today = datetime.datetime.now()
-    # last_week = today - datetime.timedelta(days=7)
-    # posts = Post.objects.filter(dateCreation__gte=last_week)
-    # categories = set(posts.values_list('postCategory__id', flat=True))
-    # subscriptions = []
-    # for cat in categories:
-    #     subscribers = Subscriber.objects.filter(category=cat).values_list('user', flat=True)
-    #     for s in subscribers:
-    #         subscriptions += User.objects.filter(id=s).values_list('email', flat=True)
-    #
-    # html_content = render_to_string('daily_post.html',
-    #                                 {
-    #                                     'link': settings.SITE_URL,
-    #                                     'posts': posts,
-    #                                 }
-    #                                 )
-    #
-    # msg = EmailMultiAlternatives(subject='Статьи за неделю.', body='',
-    #                              from_email=settings.DEFAULT_FROM_EMAIL,
-    #                              to=subscriptions)
-    # msg.attach_alternative(html_content, 'text/html')
-    # msg.send()
-    #
+    today = datetime.datetime.now()
+    last_week = today - datetime.timedelta(days=7)
+    posts = Post.objects.filter(dateCreation__gte=last_week)
+    categories = set(posts.values_list('postCategory__id', flat=True))
+    subscriptions = []
+    for cat in categories:
+        subscribers = Subscriber.objects.filter(category=cat).values_list('user', flat=True)
+        for s in subscribers:
+            subscriptions += User.objects.filter(id=s).values_list('email', flat=True)
+
+    html_content = render_to_string('daily_post.html',
+                                    {
+                                        'link': settings.SITE_URL,
+                                        'posts': posts,
+                                    }
+                                    )
+
+    msg = EmailMultiAlternatives(subject='Статьи за неделю.', body='',
+                                 from_email=settings.DEFAULT_FROM_EMAIL,
+                                 to=subscriptions)
+    msg.attach_alternative(html_content, 'text/html')
+    msg.send()
+
 
 
 @util.close_old_connections
