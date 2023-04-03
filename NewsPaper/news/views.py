@@ -7,12 +7,9 @@ from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_protect
 from django.db.models import Exists, OuterRef
-from .models import *
+from .models import Post, Author
 from .filters import *
 from .forms import *
-# import logging
-#
-# logger = logging.getLogger(__name__)
 
 
 def NewsList(request):

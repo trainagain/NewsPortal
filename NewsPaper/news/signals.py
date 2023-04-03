@@ -1,42 +1,6 @@
-from django.conf import settings
-# from django.core.mail import EmailMultiAlternatives
 from django.db.models.signals import m2m_changed
 from django.dispatch import receiver
-# from django.template.loader import render_to_string
-from .models import *
 from .task import *
-
-
-# def send_notifications_news(preview, pk, title, subscriptions):
-#     html_content = render_to_string('post_created_email.html',
-#                                     {
-#                                        'text': preview,
-#                                        'link': f'{settings.SITE_URL}/news/{pk}',
-#                                        'title': title
-#                                     }
-#                                     )
-#
-#     msg = EmailMultiAlternatives(subject=title, body='',
-#                                  from_email=settings.DEFAULT_FROM_EMAIL,
-#                                  to=subscriptions)
-#     msg.attach_alternative(html_content, 'text/html')
-#     msg.send()
-#
-#
-# def send_notifications_article(preview, pk, title, subscriptions):
-#     html_content = render_to_string('post_created_email.html',
-#                                     {
-#                                        'text': preview,
-#                                        'link': f'{settings.SITE_URL}/article/{pk}',
-#                                        'title': title
-#                                     }
-#                                     )
-#
-#     msg = EmailMultiAlternatives(subject=title, body='',
-#                                  from_email=settings.DEFAULT_FROM_EMAIL,
-#                                  to=subscriptions)
-#     msg.attach_alternative(html_content, 'text/html')
-#     msg.send()
 
 
 @receiver(m2m_changed, sender=PostCategory)
