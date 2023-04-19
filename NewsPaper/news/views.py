@@ -121,15 +121,15 @@ def subscriptions(request):
         action = request.POST.get('action')
 
         if action == 'subscribe':
-            Subscriber.objects.create(user=request.user, category=category)
+            Subscriber.objects.create(user=request.user, p_rat=category)
         elif action == 'unsubscribe':
-            Subscriber.objects.filter(user=request.user, category=category,).delete()
+            Subscriber.objects.filter(user=request.user, p_rat=category,).delete()
 
     categories_with_subscriptions = Category.objects.annotate(
                                                               user_subscribed=Exists(
                                                                                      Subscriber.objects.filter
                                                                                      (user=request.user,
-                                                                                      category=OuterRef('pk'),)
+                                                                                      p_rat=OuterRef('pk'),)
                                                                                      )
                                                               ).order_by('name')
 
